@@ -327,11 +327,14 @@ vision-language-report-generator/
 ├── .env.example              # Environment template
 │
 ├── services/
-│   ├── gemini_service.py     # Gemini Vision + Text
+│   ├── storage_service.py    # File storage handling
+│   ├── vision_service.py     # Vision model integration
 │   ├── csv_service.py        # CSV analysis
-│   ├── report_service.py     # Report generation
-│   ├── pdf_service.py        # PDF creation
-│   └── __init__.py
+│   ├── llm_service.py        # OpenAI LLM integration
+│   ├── langchain_agent.py    # LangChain agent orchestration
+│   ├── qdrant_service.py     # Vector database operations
+│   ├── report_service.py     # Main report generation
+│   └── pdf_service.py
 │
 ├── examples/
 │   ├── request_example.json
