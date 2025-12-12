@@ -10,7 +10,10 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: str
     OPENAI_MODEL: str = "gpt-4o-mini"
-    
+
+    #GEMINI
+    GEMINI_API_KEY : str 
+    GEMINI_MODEL : str = "gemini-2.5-flash"
     # Database
     DATABASE_URL: str = "postgresql://user:password@localhost:5432/reportdb"
     
