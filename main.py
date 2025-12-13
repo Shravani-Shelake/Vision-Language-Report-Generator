@@ -72,11 +72,6 @@ async def upload_csv(
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
-    """
-    Upload a CSV file and get file_id
-    
-    Use this file_id later in /generate-report endpoint
-    """
     # Validate file extension
     if not any(file.filename.lower().endswith(ext) for ext in settings.ALLOWED_CSV_EXTENSIONS):
         raise HTTPException(status_code=400, detail="Invalid file type. Only CSV files allowed.")
@@ -106,11 +101,7 @@ async def upload_image(
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
-    """
-    Upload an image file and get file_id
-    
-    Use this file_id later in /generate-report endpoint
-    """
+
     # Validate file extension
     if not any(file.filename.lower().endswith(ext) for ext in settings.ALLOWED_IMAGE_EXTENSIONS):
         raise HTTPException(status_code=400, detail="Invalid file type. Only image files allowed.")
@@ -142,9 +133,9 @@ def process_report_generation(
     description: str,
     db: Session
 ):
-    """Background task to generate report"""
+
     try:
-        print(f"\n📊 Processing report: {report_id}")
+        print(f"\n Processing report: {report_id}")
         
         # Update status to processing
         report = db.query(Report).filter(Report.report_id == report_id).first()
@@ -187,12 +178,7 @@ async def generate_report(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """
-    Generate a business report from uploaded files (using file_ids)
-    
-    This starts background processing and returns immediately with report_id.
-    Use GET /report/{report_id} to check status and get results.
-    """
+
     # Validate file IDs exist
     csv_files = db.query(UploadedFile).filter(
         UploadedFile.file_id.in_(request.csv_file_ids)
@@ -493,3 +479,4 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
