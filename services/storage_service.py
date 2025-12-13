@@ -22,10 +22,6 @@ class StorageService:
             self.local_path.mkdir(parents=True, exist_ok=True)
     
     async def upload_file(self, file: UploadFile, file_type: str) -> Tuple[str, str]:
-        """
-        Upload file to S3 or local storage
-        Returns: (file_id, storage_path)
-        """
         file_id = str(uuid.uuid4())
         file_extension = Path(file.filename).suffix
         storage_filename = f"{file_id}{file_extension}"
@@ -57,7 +53,6 @@ class StorageService:
         return file_id, storage_path
     
     def get_file_path(self, storage_path: str) -> str:
-        """Get local file path from storage path"""
         if self.use_local:
             return storage_path
         else:
