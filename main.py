@@ -273,7 +273,7 @@ async def search_reports(query: str, limit: int = 5):
 @app.post("/generate-report-instant")
 async def generate_report_instant(
     csv_files: List[UploadFile] = File(..., description="Upload one or more CSV files"),
-    image_files: Optional[List[UploadFile]] = File(None, description="Upload images (optional)"),
+    image_files: List[UploadFile] = File(None, description="Upload images (optional)"),
     description: str = Form(..., description="Describe what analysis you want")
 ):
 
@@ -355,7 +355,7 @@ async def generate_report_instant(
 @app.post("/generate-report-instant-pdf")
 async def generate_report_instant_pdf(
     csv_files: List[UploadFile] = File(..., description="Upload one or more CSV files"),
-    image_files: Optional[List[UploadFile]] = File(None, description="Upload images (optional)"),
+    image_files: List[UploadFile] = File(None, description="Upload images (optional)"),
     description: str = Form(..., description="Describe what analysis you want")
 ):
 
@@ -479,4 +479,5 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
