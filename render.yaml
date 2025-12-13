@@ -12,7 +12,7 @@ services:
       - key: Gemini_API_KEY
         sync: false
       - key: USE_LOCAL_STORAGE
-        value: true
+        value: "true"
 
   - type: pserv
     name: report-generator-db
