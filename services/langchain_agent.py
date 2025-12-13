@@ -53,7 +53,6 @@ Use the available tools to gather information, then synthesize it into a compreh
         self.agent_executor = AgentExecutor(agent=self.agent, tools=self.tools, verbose=True)
     
     def _analyze_csv_tool(self, csv_path: str) -> str:
-        """Tool wrapper for CSV analysis"""
         try:
             result = self.csv_service.analyze_csv(csv_path)
             summary = f"CSV Analysis:\n"
@@ -68,7 +67,6 @@ Use the available tools to gather information, then synthesize it into a compreh
             return f"Error analyzing CSV: {str(e)}"
     
     def _analyze_image_tool(self, image_path: str) -> str:
-        """Tool wrapper for image analysis"""
         try:
             result = self.vision_service.analyze_image(image_path)
             return f"Image Analysis:\nCaption: {result['caption']}\nDescription: {result['description']}"
@@ -76,7 +74,6 @@ Use the available tools to gather information, then synthesize it into a compreh
             return f"Error analyzing image: {str(e)}"
     
     def _generate_insight_tool(self, data_summary: str) -> str:
-        """Tool wrapper for insight generation"""
         try:
             prompt = f"Based on this data, provide 3 key business insights:\n{data_summary}"
             return self.llm_service.generate_text_completion(prompt)
@@ -84,9 +81,7 @@ Use the available tools to gather information, then synthesize it into a compreh
             return f"Error generating insights: {str(e)}"
     
     def process_report_request(self, csv_paths: List[str], image_paths: List[str], description: str) -> Dict[str, Any]:
-        """
-        Main method to process report generation using agent
-        """
+        
         try:
             # Build input for agent
             input_text = f"""Generate a comprehensive business report based on:
