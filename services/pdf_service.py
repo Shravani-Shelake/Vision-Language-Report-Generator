@@ -11,9 +11,6 @@ from datetime import datetime
 class PDFService:
     @staticmethod
     def generate_report_pdf(report_data: Dict[str, Any], report_id: str) -> BytesIO:
-        """
-        Generate PDF report from report data
-        """
         buffer = BytesIO()
         doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0.75*inch)
         story = []
