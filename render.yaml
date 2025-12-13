@@ -1,1 +1,22 @@
+services:
+  - type: web
+    name: report-generator-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: Gemini_API_KEY
+        sync: false
+      - key: USE_LOCAL_STORAGE
+        value: true
 
+  - type: pserv
+    name: report-generator-db
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile.postgres
