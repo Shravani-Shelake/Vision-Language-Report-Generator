@@ -21,9 +21,6 @@ class ReportService:
         image_file_paths: List[str],
         description: str
     ) -> Dict[str, Any]:
-        """
-        Main method to generate comprehensive report
-        """
         try:
             # 1. Analyze CSV files
             csv_analyses = self.csv_service.analyze_multiple_csvs(csv_file_paths)
@@ -64,7 +61,6 @@ class ReportService:
             }
     
     def _format_vision_insights(self, vision_results: List[Dict[str, str]]) -> str:
-        """Format vision analysis results into text"""
         insights = []
         for idx, result in enumerate(vision_results):
             if result.get("status") == "success":
@@ -76,9 +72,7 @@ class ReportService:
         return "\n".join(insights) if insights else "No visual insights available"
     
     def store_report_embedding(self, report_id: str, report_data: Dict[str, Any]):
-        """Store report in vector database"""
         return self.qdrant_service.store_report_embedding(report_id, report_data)
     
     def search_similar_reports(self, query: str, limit: int = 5):
-        """Search for similar reports"""
         return self.qdrant_service.search_similar_reports(query, limit)
