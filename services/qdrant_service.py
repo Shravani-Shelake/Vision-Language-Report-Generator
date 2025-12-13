@@ -17,7 +17,6 @@ class QdrantService:
         self._init_collection()
     
     def _init_collection(self):
-        """Initialize Qdrant collection"""
         try:
             collections = self.client.get_collections().collections
             exists = any(c.name == self.collection_name for c in collections)
@@ -34,12 +33,10 @@ class QdrantService:
             print(f"Warning: Could not initialize Qdrant collection: {e}")
     
     def embed_text(self, text: str) -> List[float]:
-        """Generate embedding for text"""
         embedding = self.encoder.encode(text)
         return embedding.tolist()
     
     def store_report_embedding(self, report_id: str, report_data: Dict[str, Any]):
-        """Store report embeddings in Qdrant"""
         try:
             # Create text representation of report
             text_parts = []
@@ -88,7 +85,6 @@ class QdrantService:
             return False
     
     def search_similar_reports(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
-        """Search for similar reports"""
         try:
             query_embedding = self.embed_text(query)
             
