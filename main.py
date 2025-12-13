@@ -44,8 +44,8 @@ report_service = ReportService()
 async def startup_event():
     init_db()
     print("=" * 60)
-    print("🚀 Vision-Language Report Generator")
-    print("💚 Powered by Google Gemini (FREE & Fast!)")
+    print(" Vision-Language Report Generator")
+    print(" Powered by Google Gemini (FREE & Fast!)")
     print("=" * 60)
     print("Database initialized")
 
@@ -66,8 +66,6 @@ async def root():
             "PDF generation"
         ]
     }
-
-# ==================== MULTI-STEP WORKFLOW (With Database) ====================
 
 @app.post("/upload/csv", response_model=FileUploadResponse)
 async def upload_csv(
@@ -241,11 +239,6 @@ async def generate_report(
 
 @app.get("/report/{report_id}", response_model=ReportResponse)
 async def get_report(report_id: str, db: Session = Depends(get_db)):
-    """
-    Get report status and data by report_id
-    
-    Status can be: pending, processing, completed, or failed
-    """
     report = db.query(Report).filter(Report.report_id == report_id).first()
     
     if not report:
@@ -267,9 +260,7 @@ async def get_report(report_id: str, db: Session = Depends(get_db)):
 
 @app.get("/report/{report_id}/pdf")
 async def get_report_pdf(report_id: str, db: Session = Depends(get_db)):
-    """
-    Generate and download PDF report by report_id
-    """
+
     report = db.query(Report).filter(Report.report_id == report_id).first()
     
     if not report:
@@ -289,15 +280,9 @@ async def get_report_pdf(report_id: str, db: Session = Depends(get_db)):
 
 @app.get("/reports/search")
 async def search_reports(query: str, limit: int = 5):
-    """
-    Search for similar reports using vector similarity (Qdrant)
-    
-    Example: /reports/search?query=sales+trends&limit=5
-    """
+
     results = report_service.search_similar_reports(query, limit)
     return {"query": query, "results": results, "count": len(results)}
-
-# ==================== DIRECT WORKFLOW (Simple, No Database) ====================
 
 @app.post("/generate-report-instant")
 async def generate_report_instant(
@@ -305,12 +290,7 @@ async def generate_report_instant(
     image_files: Optional[List[UploadFile]] = File(None, description="Upload images (optional)"),
     description: str = Form(..., description="Describe what analysis you want")
 ):
-    """
-    Direct workflow: Upload files and get instant JSON report
-    
-    This bypasses the database and returns results immediately.
-    Good for quick analysis or when you don't need to store reports.
-    """
+
     temp_csv_paths = []
     temp_image_paths = []
     
@@ -392,11 +372,7 @@ async def generate_report_instant_pdf(
     image_files: Optional[List[UploadFile]] = File(None, description="Upload images (optional)"),
     description: str = Form(..., description="Describe what analysis you want")
 ):
-    """
-    Direct workflow: Upload files and download PDF instantly
-    
-    This bypasses the database and returns PDF immediately.
-    """
+
     temp_csv_paths = []
     temp_image_paths = []
     
@@ -466,11 +442,7 @@ async def list_files(
     limit: int = 50,
     db: Session = Depends(get_db)
 ):
-    """
-    List all uploaded files
-    
-    Optional filter by file_type: 'csv' or 'image'
-    """
+
     query = db.query(UploadedFile)
     
     if file_type:
@@ -497,11 +469,6 @@ async def list_reports(
     limit: int = 50,
     db: Session = Depends(get_db)
 ):
-    """
-    List all reports
-    
-    Optional filter by status: 'pending', 'processing', 'completed', 'failed'
-    """
     query = db.query(Report)
     
     if status:
@@ -524,4 +491,5 @@ async def list_reports(
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
