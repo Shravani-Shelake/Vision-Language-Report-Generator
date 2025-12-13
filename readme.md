@@ -60,13 +60,14 @@ vision-language-report-generator/
 ├── .env.example                # Environment template
 │
 ├── services/
-│   ├── gemini_service.py       # Gemini AI (vision + text)
-│   ├── csv_service.py          # CSV analysis
-│   ├── report_service.py       # Report generation
-│   ├── pdf_service.py          # PDF creation
-│   ├── qdrant_service.py       # Vector search
-│   ├── storage_service.py      # File storage (S3/Local)
-│   └── langchain_agent.py      # LangChain orchestration
+│   ├── storage_service.py    # File storage handling
+│   ├── vision_service.py     # Vision model integration(Gemini)
+│   ├── csv_service.py        # CSV analysis
+│   ├── llm_service.py        # OpenAI LLM integration (Gemini/ OpenAI)
+│   ├── langchain_agent.py    # LangChain agent orchestration
+│   ├── qdrant_service.py     # Vector database operations
+│   ├── report_service.py     # Main report generation
+│   └── pdf_service.py        # PDF generation     
 │
 ├── storage/                     # Local file storage
 ├── Dockerfile                   # Docker configuration
