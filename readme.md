@@ -442,36 +442,6 @@ with open('sales_data.csv', 'rb') as csv_file:
         print(f"Metrics: {report['data']['key_metrics']}")
 ```
 
----
-
-## 📊 API Endpoints Reference
-
-### Multi-Step Workflow Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/upload/csv` | POST | Upload CSV file → Get `file_id` |
-| `/upload/image` | POST | Upload image → Get `file_id` |
-| `/generate-report` | POST | Generate report from file IDs → Get `report_id` |
-| `/report/{report_id}` | GET | Check status & get report data |
-| `/report/{report_id}/pdf` | GET | Download PDF report |
-| `/reports/search` | GET | Search similar reports (vector search) |
-| `/files/list` | GET | List all uploaded files |
-| `/reports/list` | GET | List all reports |
-
-### Direct Workflow Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/generate-report-instant` | POST | Upload files → Get instant JSON report |
-| `/generate-report-instant-pdf` | POST | Upload files → Download PDF instantly |
-
-### General Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Health check |
-| `/docs` | GET | Swagger documentation |
 
 ---
 
@@ -538,27 +508,6 @@ April,225000,550,610,369
 }
 ```
 
----
-
-## 🔧 Configuration
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `GOOGLE_API_KEY` | Yes | - | Google Gemini API key |
-| `GEMINI_MODEL` | No | `gemini-2.0-flash-exp` | Gemini model version |
-| `DATABASE_URL` | Yes | - | PostgreSQL connection string |
-| `QDRANT_HOST` | Yes | `localhost` | Qdrant server host |
-| `QDRANT_PORT` | Yes | `6333` | Qdrant server port |
-| `QDRANT_COLLECTION` | No | `reports_collection` | Collection name |
-| `USE_LOCAL_STORAGE` | No | `true` | Use local storage vs S3 |
-| `LOCAL_STORAGE_PATH` | No | `./storage` | Local storage directory |
-| `AWS_ACCESS_KEY_ID` | No | - | AWS S3 access key |
-| `AWS_SECRET_ACCESS_KEY` | No | - | AWS S3 secret key |
-| `S3_BUCKET_NAME` | No | - | AWS S3 bucket name |
-| `DEBUG` | No | `true` | Enable debug mode |
-
 ### Storage Options
 
 **Local Storage (Development):**
@@ -615,120 +564,6 @@ curl -X POST http://localhost:8000/generate-report-instant-pdf \
   -o instant_report.pdf
 ```
 
----
-
-## 🚀 Deployment
-
-### Option 1: Railway
-
-```bash
-# Install Railway CLI
-npm i -g @railway/cli
-
-# Login
-railway login
-
-# Initialize project
-railway init
-
-# Add PostgreSQL
-railway add postgresql
-
-# Set environment variables
-railway variables set GOOGLE_API_KEY="your_key"
-
-# Deploy
-railway up
-
-# Get URL
-railway domain
-```
-
-### Option 2: Render
-
-1. Push code to GitHub
-2. Go to https://render.com
-3. Create "Web Service" from GitHub repo
-4. Add PostgreSQL database
-5. Set environment variables
-6. Deploy
-
-### Option 3: Docker
-
-```bash
-# Using docker-compose
-docker-compose up -d
-
-# Or build manually
-docker build -t report-generator .
-docker run -d -p 8000:8000 \
-  -e GOOGLE_API_KEY="your_key" \
-  -e DATABASE_URL="your_db_url" \
-  report-generator
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Database Connection Issues
-
-```bash
-# Check PostgreSQL is running
-sudo systemctl status postgresql  # Linux
-brew services list                # macOS
-
-# Test connection
-psql -h localhost -U reportuser -d reportdb
-
-# Check DATABASE_URL in .env
-echo $DATABASE_URL
-```
-
-### Qdrant Connection Issues
-
-```bash
-# Check if Qdrant is running
-curl http://localhost:6333/health
-
-# View Qdrant logs
-docker logs qdrant
-
-# Restart Qdrant
-docker restart qdrant
-```
-
-### Gemini API Issues
-
-**Invalid API Key:**
-- Verify key in .env: `cat .env | grep GOOGLE_API_KEY`
-- Check key at https://makersuite.google.com/app/apikey
-- Ensure key starts with `AIza`
-
-**Rate Limit Exceeded:**
-- Free tier: 60 requests/minute, 1,500/day
-- Wait 60 seconds or upgrade tier
-
-### Background Task Not Processing
-
-```bash
-# Check logs for errors
-tail -f uvicorn.log
-
-# Verify database connection
-# Check report status in database
-psql -d reportdb -c "SELECT report_id, status FROM reports ORDER BY created_at DESC LIMIT 5;"
-```
-
-### Port Already in Use
-
-```bash
-# Kill process on port 8000
-lsof -ti:8000 | xargs kill -9
-
-# Or use different port
-uvicorn main:app --port 8001
-```
 
 ---
 
@@ -745,21 +580,6 @@ uvicorn main:app --port 8001
 - Pay-as-you-go
 - Much cheaper than OpenAI
 - See: https://ai.google.dev/pricing
-
-### Infrastructure Costs
-
-**Development (Local):**
-- PostgreSQL: $0 (local)
-- Qdrant: $0 (local)
-- Gemini API: $0 (free tier)
-- **Total: $0/month**
-
-**Production (Cloud):**
-- Hosting (Railway/Render): $5-10/month
-- PostgreSQL (managed): $15/month
-- Qdrant Cloud: $25/month (or $0 self-hosted)
-- Gemini API: $0-20/month
-- **Total: ~$45-70/month**
 
 ---
 
