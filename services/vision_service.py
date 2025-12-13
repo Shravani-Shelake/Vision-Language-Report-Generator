@@ -15,9 +15,6 @@ class BlipVisionService:
         print("Vision model loaded successfully")
     
     def analyze_image(self, image_path: str) -> Dict[str, str]:
-        """
-        Analyze a single image and extract insights
-        """
         try:
             image = Image.open(image_path).convert('RGB')
             
@@ -45,9 +42,6 @@ class BlipVisionService:
             }
     
     def analyze_multiple_images(self, image_paths: List[str]) -> List[Dict[str, str]]:
-        """
-        Analyze multiple images
-        """
         results = []
         for idx, path in enumerate(image_paths):
             result = self.analyze_image(path)
@@ -65,16 +59,10 @@ class VisionService:
         print("Gemini vision service initialized successfully")
     
     def _get_mime_type(self, image_path: str) -> str:
-        """
-        Detect MIME type from file path
-        """
         mime_type, _ = mimetypes.guess_type(image_path)
         return mime_type or 'image/jpeg'
     
     def analyze_image(self, image_path: str) -> Dict[str, str]:
-        """
-        Analyze a single image and extract insights
-        """
         try:
             # Read image as bytes
             with open(image_path, 'rb') as f:
@@ -121,9 +109,6 @@ class VisionService:
             }
     
     def analyze_multiple_images(self, image_paths: List[str]) -> List[Dict[str, str]]:
-        """
-        Analyze multiple images
-        """
         results = []
         for idx, path in enumerate(image_paths):
             result = self.analyze_image(path)
@@ -133,10 +118,6 @@ class VisionService:
         return results
     
     def compare_images(self, image_paths: List[str], prompt: str = None) -> str:
-        """
-        Compare multiple images and return differences/insights
-        Useful for analyzing multiple related charts or infographics together
-        """
         try:
             if not image_paths:
                 return "No images provided"
