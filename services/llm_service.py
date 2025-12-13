@@ -12,9 +12,6 @@ class OpenAILLMService:
         self.model = settings.OPENAI_MODEL
         
     def generate_insights(self, csv_summary: str, vision_insights: str, user_description: str) -> Dict[str, Any]:
-        """
-        Use LLM to generate comprehensive insights from CSV and vision data
-        """
         prompt = f"""You are a business analytics AI. Analyze the following data and generate a comprehensive report.
 
 USER REQUEST: {user_description}
@@ -79,7 +76,6 @@ Provide actionable, specific insights based on the data. Be concise but comprehe
             }
     
     def generate_text_completion(self, prompt: str) -> str:
-        """Generic text completion"""
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -102,9 +98,6 @@ class GeminiLLMService:
         self.model = "gemini-2.5-flash"  # or "gemini-2.5-flash"
         
     def generate_insights(self, csv_summary: str, vision_insights: str, user_description: str) -> Dict[str, Any]:
-        """
-        Use LLM to generate comprehensive insights from CSV and vision data
-        """
         prompt = f"""You are a business analytics AI. Analyze the following data and generate a comprehensive report.
 
 USER REQUEST: {user_description}
@@ -191,7 +184,6 @@ IMPORTANT: Respond with ONLY valid JSON. Do not include any markdown formatting,
             }
     
     def generate_text_completion(self, prompt: str) -> str:
-        """Generic text completion"""
         try:
             response = self.client.models.generate_content(
                 model=self.model,
@@ -205,17 +197,9 @@ IMPORTANT: Respond with ONLY valid JSON. Do not include any markdown formatting,
             return f"Error: {str(e)}"
     
     def create_chat_session(self):
-        """
-        Create a new chat session for multi-turn conversations
-        Returns a chat object that maintains conversation history
-        """
         return self.client.chats.create(model=self.model)
     
     def chat_with_history(self, chat_session, message: str) -> str:
-        """
-        Send a message in an existing chat session
-        Useful for follow-up questions about the analysis
-        """
         try:
             response = chat_session.send_message(message)
             return response.text.strip()
@@ -223,9 +207,6 @@ IMPORTANT: Respond with ONLY valid JSON. Do not include any markdown formatting,
             return f"Error: {str(e)}"
     
     def get_chat_history(self, chat_session) -> list:
-        """
-        Get the full conversation history from a chat session
-        """
         try:
             history = []
             for message in chat_session.get_history():
