@@ -55,7 +55,7 @@ class VisionService:
     def __init__(self):
         print("Initializing Gemini vision service...")
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
-        self.model = "gemini-2.0-flash-exp"  # or "gemini-2.5-flash" based on your needs
+        self.model = "gemini-2.5-flash"  # or "gemini-2.5-flash" based on your needs
         print("Gemini vision service initialized successfully")
     
     def _get_mime_type(self, image_path: str) -> str:
